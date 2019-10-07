@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CopyBand</string>
+    <string name="manual_title">Перед началом</string>
+    <string name="step_1">Откройте Mi Fit</string>
+</resources>

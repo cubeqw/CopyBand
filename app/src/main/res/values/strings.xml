@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name" translatable="false">CopyBand</string>
+    <string name="manual_title">Before start</string>
+    <string name="step_1">Open Mi Fit</string>
+    <string name="step_2">Click on Profile in the lower right corner</string>
+</resources>
