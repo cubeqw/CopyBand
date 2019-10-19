@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,15 +27,34 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
     EditText text;
     boolean first=true;
     SharedPreferences sPref;
-
-
-
+    int miband;
+    int bc;
+    int tc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         text =findViewById(R.id.text);
-        sPref=getPreferences(MODE_PRIVATE);
+        sPref=getSharedPreferences("setup",MODE_PRIVATE);
+        miband=sPref.getInt("miband", -1);
+        if(miband==-1){
+            Intent intent=new Intent(MainActivity.this, Setup.class);
+            startActivity(intent);
+            this.finish();
+        }
+        if (miband==2){
+            bc=10;
+            tc=80;
+        }
+        if (miband==1){
+            bc=5;
+            tc=123;
+        }
+        if (miband==0){
+            bc=16;
+            tc=123;
+        }
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(CHANNEL_DESC);
@@ -49,18 +70,18 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
         return false;
     }
     public void onClick(View v){
-        for (int i = 0; i < 16; i++) {
-            if(first){
-                message=text.getText().toString();
-                first=false;
+        for (int i = 0; i < bc; i++) {
+            if (first) {
+                message = text.getText().toString();
+                first = false;
             }
             createNotification();
             count++;
         }
         count=0;
         first=true;
-        NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
-        mNotificationMgr.cancelAll();
+       if(first){ NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
+        mNotificationMgr.cancelAll();}
     }
 
     public void createNotification(){
@@ -69,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
                     new NotificationCompat.Builder(this, CHANNEL_ID)
                             .setSmallIcon(R.drawable.ic_launcher_foreground)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            if(message.length()<=123*16) {
+            if(message.length()<=bc*tc) {
                 try {
-                    if (message.length() > 123 - 123 * count) {
-                        String numbers = message.substring(message.length() - 123);
-                        message = message.substring(0, message.length() - 123);
+                    if (message.length() > tc - tc * count) {
+                        String numbers = message.substring(message.length() - tc);
+                        message = message.substring(0, message.length() - tc);
                         mBuilder.setContentText(numbers);
                         mNotificationMgr.notify(1, mBuilder.build());
                     } else {
@@ -84,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements TextView.OnEditor
                     mBuilder.setContentText(message);
                     mNotificationMgr.notify(1, mBuilder.build());
                 }
+            }else {
+        }}
 
-            }}
 }
