@@ -20,7 +20,7 @@ public class Setup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
-        setTitle("Chose your Mi Band");
+        setTitle(getResources().getString(R.string.chose));
         sPref=getSharedPreferences("setup",MODE_PRIVATE);
         ed=sPref.edit();
         mBoldCheckBox =findViewById(R.id.checkBoxBold);
@@ -49,7 +49,6 @@ public class Setup extends AppCompatActivity {
            miband=0;
        ed.putInt("miband", miband);
        ed.commit();
-       Toast.makeText(getApplicationContext(), miband+"", Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(Setup.this, MainActivity.class);
         intent.putExtra("setup_end", miband);
         startActivity(intent);

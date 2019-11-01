@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name" translatable="false">CopyBand</string>
     <string name="manual_title">Before start</string>
-    <string name="step_1">Open Mi Fit</string>
-    <string name="step_2">Click on Profile in the lower right corner</string>
+    <string name="start_btn">Open Mi Fit</string>
+    <string name="notification_settings">" Allow notifications for CopyBand in bracelet settings via Mi Fit"</string>
+    <string name="chose">Chose your Mi Band</string>
+    <string name="flash">Flashed</string>
+    <string name="clean_history">Clean history</string>
+    <string name="edit_model">Setup other Mi Band</string>
+    <string name="about">About</string>
+    <string name="annotation">Do you want to remember something, but the phone is about to be discharged, or do you want to carry it with you? I have great news for you! You have a Mi Band, and you can send text to it using this application. Just enter it in the input field and click send. Magic happens and you see this text on your bracelet.</string>
+    <string name="title_bd">Turn off bluetooth?</string>
+    <string name="bt_diag">To prevent text loss due to other notifications, turn off Bluetooth. It will be disconnected after 30 seconds.</string>
+    <string name="off">Turn off</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_app">It seems that you do not have the Mi Fit application installed. Want to install it?</string>
+    <string name="install">Install</string>
+    <string name="bt_off">Bluetooth off</string>
+    <string name="bt_on">Bluetooth is off. Turn on Bluetooth and check the connection with the bracelet.</string>
 </resources>

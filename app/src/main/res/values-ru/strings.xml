@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CopyBand</string>
     <string name="manual_title">Перед началом</string>
-    <string name="step_1">Откройте Mi Fit</string>
+    <string name="start_btn">Открыть Mi Fit</string>
+    <string name="notification_settings">Разрешите уведомления для CopyBand в настройках браслета через Mi Fit</string>
+    <string name="flash">Прошитый</string>
+    <string name="chose">Какой у вас браслет?</string>
+    <string name="clean_history">Очистить историю</string>
+    <string name="edit_model">Выбрать друго</string>
+    <string name="about">О программе</string>
+    <string name="annotation">Хотите запомнить что-то, а телефон вот вот разрядится или вы не хотите носить его с собой? У меня для Вас отличная новость! У Вас есть Mi Band, и Вы можете на него отправить текст с помощью этого приложения. Просто введите его в поле ввода и нажмите отправить. Происходит магия и вы видете этот текст на своём браслете.</string>
+    <string name="title_bd">Выключить Bluetooth?</string>
+    <string name="bt_diag">"Чтобы предотвратить потерю текста из-за других уведомлений, Bluetooth необходимо выключить. Он будет отключён через 30 cекунд. "</string>
+    <string name="cancel">Отмена</string>
+    <string name="off">Отключить</string>
+    <string name="install">Установить</string>
+    <string name="dialog_app">Похоже у Вас не установлено приложение Mi Fit. Хотите установить его?</string>
+    <string name="bt_off">Bluetooth отключён</string>
+    <string name="bt_on">Bluetooth отключён. Включите Bluetooth и проверьте соединение с браслетом.</string>
 </resources>
