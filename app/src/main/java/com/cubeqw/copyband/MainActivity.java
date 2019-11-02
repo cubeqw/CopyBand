@@ -42,13 +42,13 @@ public class MainActivity extends AppCompatActivity{
     int count=0;
     boolean connected=true;
     EditText text;
-    boolean first=true;
     boolean bt_diag=false;
     SharedPreferences sPref;
     int miband;
     TextView empty;
     TinyDB tb;
     AlertDialog.Builder bluetooth_dialog;
+    AlertDialog.Builder long_dialog;
     int bc;
     int tc;
     String date;
@@ -111,23 +111,16 @@ public class MainActivity extends AppCompatActivity{
         toEnd();
     }
     public void onClick(View v){
+        message = text.getText().toString();
         date=new SimpleDateFormat("dd.MM HH:mm").format(Calendar.getInstance().getTime());
         if(!text.getText().toString().equals("")){
-        full= text.getText().toString();
-        for (int i = 0; i < bc; i++) {
-            if (first) {
-                message = text.getText().toString();
-                first = false;
-            }
             createNotification();
-            count++;
-        }
+        full= text.getText().toString();
         count=0;
-        first=true;
+            dates.add(date);
+            quotes.add(full);
         if(connected){
             recyclerViewAdapter.add();
-            quotes.add(full);
-            dates.add(date);
             text.setText("");
             toEnd();
             tb.putListString("history", quotes);
@@ -137,7 +130,6 @@ public class MainActivity extends AppCompatActivity{
             String off=getResources().getString(R.string.off);
             String cancel=getResources().getString(R.string.cancel);
             bluetooth_dialog = new AlertDialog.Builder(MainActivity.this);
-
             bluetooth_dialog.setTitle(title);
             bluetooth_dialog.setMessage(msg);
             bluetooth_dialog.setPositiveButton(off, new DialogInterface.OnClickListener() {
@@ -156,39 +148,61 @@ public class MainActivity extends AppCompatActivity{
         }
     }}
     public void createNotification(){
-        empty.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!mBluetoothAdapter.isEnabled()) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_on), Toast.LENGTH_SHORT).show();
-            connected=false;
-        }
-        else {
-            connected=true;
-            NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            if (message.length() <= bc * tc) {
-                try {
-                    if (message.length() > tc - tc * count) {
-                        String numbers = message.substring(message.length() - tc);
-                        message = message.substring(0, message.length() - tc);
-                        mBuilder.setContentText(numbers);
-                        mNotificationMgr.notify(1, mBuilder.build());
-                    } else {
+        for (int i = 0; i < bc; i++) {
+            empty.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (!mBluetoothAdapter.isEnabled()) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_on), Toast.LENGTH_SHORT).show();
+                connected=false;
+            }
+            else {
+                connected=true;
+                NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(this, CHANNEL_ID)
+                                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                if (message.length() <= bc * tc) {
+                    try {
+                        if (message.length() > tc - tc * count) {
+                            String numbers = message.substring(message.length() - tc);
+                            message = message.substring(0, message.length() - tc);
+                            mBuilder.setContentText(numbers);
+                            mNotificationMgr.notify(1, mBuilder.build());
+                        } else {
+                            mBuilder.setContentText(message);
+                            mNotificationMgr.notify(1, mBuilder.build());
+                        }
+                    } catch (IndexOutOfBoundsException e) {
                         mBuilder.setContentText(message);
                         mNotificationMgr.notify(1, mBuilder.build());
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    mBuilder.setContentText(message);
-                    mNotificationMgr.notify(1, mBuilder.build());
+                    toEnd();
                 }
-                toEnd();
-            }
-        else{
-        }}}
+                else{
+                    long_dialog= new AlertDialog.Builder(MainActivity.this);
+                    String title=getResources().getString(R.string.long_title);
+                    String msg=getResources().getString(R.string.long_message);
+                    String cancel=getResources().getString(R.string.cancel);
+                    String contine=getResources().getString(R.string.contine);
+                    long_dialog.setTitle(title);
+                    long_dialog.setMessage(msg);
+                    long_dialog.setPositiveButton(contine, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            message=message.substring(0,bc*tc);
+                            createNotification();
+                        }
+                    });
+                    long_dialog.setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) {
+                        }
+                    });
+                    long_dialog.show();
+                    break;
+                }}            count++;
+        }
+        }
     public void toEnd(){
         recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
     }
@@ -215,12 +229,10 @@ public class MainActivity extends AppCompatActivity{
             default:return super.onOptionsItemSelected(item);}}
 
     public void clearData() {
-        try{
         dates.clear();
         quotes.clear();
         tb.clear();
-        recyclerViewAdapter.notifyDataSetChanged();}catch (IndexOutOfBoundsException e){}
-    }
+        recreate();}
 
     public void end_action(){
         NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
@@ -280,23 +292,17 @@ public class MainActivity extends AppCompatActivity{
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        message=quotes.get(position);
+                        message=message.replace('\n', ' ');
                         full = quotes.get(position);
                         date = new SimpleDateFormat("dd.MM HH:mm").format(Calendar.getInstance().getTime());
-                        for (int i = 0; i < bc; i++) {
-                            if (first) {
-                                message = quotes.get(position);
-                                first = false;
-                            }
-                            createNotification();
-                            count++;
-                        }
+                        createNotification();
+                        dates.add(date);
+                        quotes.add(full);
                         if(connected) {
                         quotes.remove(position);
                         dates.remove(position);
-                        dates.add(date);
                         count = 0;
-                        first = true;
-                        recyclerViewAdapter.add();
                         notifyDataSetChanged();
                         text.setText("");
                         toEnd();
@@ -314,7 +320,6 @@ public class MainActivity extends AppCompatActivity{
 
         public void add()
         {
-            dates.add(date);
             quotes.add(full);
             notifyDataSetChanged();
         }

@@ -21,4 +21,7 @@
     <string name="edit">Your message...</string>
     <string name="empty">History is empty, but it\'s easy to fix! Just send a message to your bracelet.</string>
     <string name="git">GitHub</string>
+    <string name="long_title">Very long message</string>
+    <string name="long_message">This message is very long to send to your bracelet. It will be cut off and the end may not fit. Continue?</string>
+    <string name="contine">Contine</string>
 </resources>
