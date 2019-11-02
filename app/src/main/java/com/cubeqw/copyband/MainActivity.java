@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity{
     String date;
     private CustomAdapter recyclerViewAdapter;
     RecyclerView recyclerView;
-    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,8 +251,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
     }
-    private class CustomAdapter extends RecyclerView.Adapter<QuoteViewHolder>
-    {
+    private class CustomAdapter extends RecyclerView.Adapter<QuoteViewHolder>{
         private List<String> quotes = new ArrayList<>();
         public CustomAdapter()
         {
