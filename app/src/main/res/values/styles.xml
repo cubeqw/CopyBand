@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,9 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
 
     </style>
-
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Material.Light.ActionButton.Overflow">
+        <item name="android:tint">@color/colorPrimary</item>
+    </style>
     <style name="Widget.ActionBar" parent="@style/Widget.AppCompat.ActionBar">
         <item name="titleTextStyle">@style/TextAppearance.Widget.ActionBar.Title</item>
         <item name="subtitleTextStyle">@style/TextAppearance.Widget.ActionBar.Subtitle</item>
@@ -17,7 +20,6 @@
     <style name="TextAppearance.Widget.ActionBar.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
-
     <style name="TextAppearance.Widget.ActionBar.Subtitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textColor">@color/colorAccent</item>
     </style>

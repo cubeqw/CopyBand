@@ -17,10 +17,13 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity{
     boolean bt_diag=false;
     SharedPreferences sPref;
     int miband;
+    TextView empty;
     TinyDB tb;
     AlertDialog.Builder bluetooth_dialog;
     int bc;
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity{
     String date;
     private CustomAdapter recyclerViewAdapter;
     RecyclerView recyclerView;
+    private Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +67,7 @@ public class MainActivity extends AppCompatActivity{
         dates=tb.getListString("dates");
         recyclerViewAdapter = new CustomAdapter();
         recyclerView =findViewById(R.id.recyclerview_quotes);
+        empty=findViewById(R.id.empty);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setStackFromEnd(true);
         manager.setReverseLayout(true);
@@ -75,8 +82,12 @@ public class MainActivity extends AppCompatActivity{
             date=dates.get(i);
             recyclerViewAdapter.add();
         }
+        if(quotes.size()==0){
+            empty.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
         if(miband==-1){
-            Intent intent=new Intent(MainActivity.this, Setup.class);
+            Intent intent=new Intent(MainActivity.this, Tutorial.class);
             startActivity(intent);
             this.finish();
         }
@@ -128,6 +139,7 @@ public class MainActivity extends AppCompatActivity{
             String off=getResources().getString(R.string.off);
             String cancel=getResources().getString(R.string.cancel);
             bluetooth_dialog = new AlertDialog.Builder(MainActivity.this);
+
             bluetooth_dialog.setTitle(title);
             bluetooth_dialog.setMessage(msg);
             bluetooth_dialog.setPositiveButton(off, new DialogInterface.OnClickListener() {
@@ -146,6 +158,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }}
     public void createNotification(){
+        empty.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_on), Toast.LENGTH_SHORT).show();
@@ -179,6 +193,32 @@ public class MainActivity extends AppCompatActivity{
         }}}
     public void toEnd(){
         recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.edit_model:
+                Intent intent=new Intent(MainActivity.this, Setup.class);
+                startActivity(intent);
+                return true;
+                case R.id.clean:
+                clearData();
+                    return true;
+            default:return super.onOptionsItemSelected(item);}}
+
+    public void clearData() {
+        try{
+        dates.clear();
+        quotes.clear();
+        tb.clear();
+        recyclerViewAdapter.notifyDataSetChanged();}catch (IndexOutOfBoundsException e){}
     }
 
     public void end_action(){

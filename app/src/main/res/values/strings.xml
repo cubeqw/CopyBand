@@ -17,4 +17,7 @@
     <string name="install">Install</string>
     <string name="bt_off">Bluetooth off</string>
     <string name="bt_on">Bluetooth is off. Turn on Bluetooth and check the connection with the bracelet.</string>
+    <string name="setup_br">Chose Mi Band</string>
+    <string name="edit">Your message...</string>
+    <string name="empty">History is empty, but it\'s easy to fix! Just send a message to your bracelet.</string>
 </resources>

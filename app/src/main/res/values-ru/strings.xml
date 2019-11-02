@@ -6,7 +6,7 @@
     <string name="flash">Прошитый</string>
     <string name="chose">Какой у вас браслет?</string>
     <string name="clean_history">Очистить историю</string>
-    <string name="edit_model">Выбрать друго</string>
+    <string name="edit_model">Выбрать другой браслет</string>
     <string name="about">О программе</string>
     <string name="annotation">Хотите запомнить что-то, а телефон вот вот разрядится или вы не хотите носить его с собой? У меня для Вас отличная новость! У Вас есть Mi Band, и Вы можете на него отправить текст с помощью этого приложения. Просто введите его в поле ввода и нажмите отправить. Происходит магия и вы видете этот текст на своём браслете.</string>
     <string name="title_bd">Выключить Bluetooth?</string>
@@ -17,4 +17,7 @@
     <string name="dialog_app">Похоже у Вас не установлено приложение Mi Fit. Хотите установить его?</string>
     <string name="bt_off">Bluetooth отключён</string>
     <string name="bt_on">Bluetooth отключён. Включите Bluetooth и проверьте соединение с браслетом.</string>
+    <string name="setup_br">Выбрать Mi Band</string>
+    <string name="edit">Ваше сообщение...</string>
+    <string name="empty">История пуста, но это легко исправить! Просто отправте сообщение на Ваш браслет.</string>
 </resources>

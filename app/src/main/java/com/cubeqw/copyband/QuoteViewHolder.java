@@ -26,7 +26,6 @@ public class QuoteViewHolder extends ViewHolder<String>
     protected void onSetModel(String newModel)
     {
         quoteTextView.setText(newModel);
-        date.setText(newModel);
     }
     @Override
     protected void onSetModel1(String newModel)
