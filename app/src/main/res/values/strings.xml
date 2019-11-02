@@ -20,4 +20,5 @@
     <string name="setup_br">Chose Mi Band</string>
     <string name="edit">Your message...</string>
     <string name="empty">History is empty, but it\'s easy to fix! Just send a message to your bracelet.</string>
+    <string name="git">GitHub</string>
 </resources>

@@ -209,6 +209,9 @@ public class MainActivity extends AppCompatActivity{
                 case R.id.clean:
                 clearData();
                     return true;
+            case R.id.about:
+                Intent intent1=new Intent(MainActivity.this, About.class);
+                startActivity(intent1);
             default:return super.onOptionsItemSelected(item);}}
 
     public void clearData() {

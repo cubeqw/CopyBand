@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cubeqw"
+        android:title="@string/git"
+        app:showAsAction="always"
+        android:icon="@drawable/cubeqw"
+        >
+    </item>
+</menu>
