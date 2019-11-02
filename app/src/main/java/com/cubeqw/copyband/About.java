@@ -15,6 +15,7 @@ public class About extends AppCompatActivity {
             setTitle(getResources().getString(R.string.about));
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_about);
+            setTitle(getResources().getString(R.string.about));
         }
 
         public boolean onCreateOptionsMenu(Menu menu) {
