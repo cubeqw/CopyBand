@@ -24,4 +24,6 @@
     <string name="long_message">Это сообщение очень длинное для отправки на ваш браслет. Оно будет обрезано и конец может не влезть. Продолжить?</string>
     <string name="long_title">Очень длинное сообщение</string>
     <string name="contine">Продолжить</string>
+    <string name="messages">Сообщения</string>
+    <string name="reminder">Напоминания</string>
 </resources>

@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,11 +55,24 @@ public class MainActivity extends AppCompatActivity{
     String date;
     private CustomAdapter recyclerViewAdapter;
     RecyclerView recyclerView;
+    TabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTheme(R.style.AppTheme);
+        mTabHost=findViewById(R.id.tabHost);
+        mTabHost.setup();
+        TabHost.TabSpec tabSpec = mTabHost.newTabSpec("tag1");
+        tabSpec.setContent(R.id.main);
+        tabSpec.setIndicator(getResources().getString(R.string.messages));
+        mTabHost.addTab(tabSpec);
+        tabSpec = mTabHost.newTabSpec("tag2");
+        tabSpec.setContent(R.id.reminder_layout);
+        tabSpec.setIndicator(getResources().getString(R.string.reminder));
+        mTabHost.addTab(tabSpec);
+        mTabHost.setCurrentTab(0);
         text =findViewById(R.id.text);
         tb=new TinyDB(getApplicationContext());
         quotes=tb.getListString("history");

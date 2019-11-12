@@ -24,4 +24,6 @@
     <string name="long_title">Very long message</string>
     <string name="long_message">This message is very long to send to your bracelet. It will be cut off and the end may not fit. Continue?</string>
     <string name="contine">Contine</string>
+    <string name="messages">Messages</string>
+    <string name="reminder">Reminder</string>
 </resources>
