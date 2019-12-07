@@ -73,7 +73,8 @@
                                     android:layout_below="@+id/recyclerview_quotes"
                                     android:layout_gravity="center"
                                     android:layout_weight="10"
-                                    android:hint="@string/edit" />
+                                    android:hint="@string/edit"
+                                    android:inputType="textCapSentences"/>
 
                                 <ImageView
                                     android:layout_width="match_parent"

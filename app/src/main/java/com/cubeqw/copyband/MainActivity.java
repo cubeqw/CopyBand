@@ -176,7 +176,8 @@ public class MainActivity extends AppCompatActivity{
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this, CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                                .setPriority(NotificationCompat.PRIORITY_MIN).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
+                ;
                 if (message.length() <= bc * tc) {
                     try {
                         if (message.length() > tc - tc * count) {
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onClick(View v) {
                         message=quotes.get(position);
-                        message=message.replace('\n', ' ');
+                        message=message.replaceAll("\n|\r\n", " ");
                         full = quotes.get(position);
                         date = new SimpleDateFormat("dd.MM HH:mm").format(Calendar.getInstance().getTime());
                         createNotification();
