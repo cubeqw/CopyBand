@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity{
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this, CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setPriority(NotificationCompat.PRIORITY_MIN).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
+                                .setPriority(NotificationCompat.PRIORITY_HIGH).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
                 ;
                 if (message.length() <= bc * tc) {
                     try {
@@ -321,6 +321,26 @@ public class MainActivity extends AppCompatActivity{
                         notifyDataSetChanged();
                         text.setText("");
                         toEnd();
+                                    String title=getResources().getString(R.string.title_bd);
+                                    String msg=getResources().getString(R.string.bt_diag);
+                                    String off=getResources().getString(R.string.off);
+                                    String cancel=getResources().getString(R.string.cancel);
+                                    bluetooth_dialog = new AlertDialog.Builder(MainActivity.this);
+                                    bluetooth_dialog.setTitle(title);
+                                    bluetooth_dialog.setMessage(msg);
+                                    bluetooth_dialog.setPositiveButton(off, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int arg1) {
+                                            bt_diag = true;
+                                        }
+                                    });
+                                    bluetooth_dialog.setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int arg1) {
+                                            bt_diag = false;
+                                        }
+                                    });
+                                    bluetooth_dialog.show();
+                                    Finish finish = new Finish(30000, 1000);
+                                    finish.start();
                     }}
                 });
 
