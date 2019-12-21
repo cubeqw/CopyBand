@@ -9,6 +9,22 @@
         <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
 
     </style>
+    <style name="widget">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="edit_button">
+        <item name="android:layout_width">0sp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@android:drawable/btn_default</item>
+    </style>
+
+    <style name="list_item">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="MyActionButtonOverflow" parent="android:style/Widget.Material.Light.ActionButton.Overflow">
         <item name="android:tint">@color/colorPrimary</item>
     </style>

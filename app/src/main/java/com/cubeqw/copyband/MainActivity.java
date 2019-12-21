@@ -1,5 +1,6 @@
 package com.cubeqw.copyband;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -17,11 +18,16 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -56,7 +63,17 @@ public class MainActivity extends AppCompatActivity{
     private CustomAdapter recyclerViewAdapter;
     RecyclerView recyclerView;
     TabHost mTabHost;
+    private final String TAG = "AlarmMe";
 
+    private ListView mAlarmList;
+    private AlarmListAdapter mAlarmListAdapter;
+    private Alarm mCurrentAlarm;
+
+    private final int NEW_ALARM_ACTIVITY = 0;
+    private final int EDIT_ALARM_ACTIVITY = 1;
+    private final int PREFERENCES_ACTIVITY = 2;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +105,16 @@ public class MainActivity extends AppCompatActivity{
         recyclerView.setAdapter(recyclerViewAdapter);
         toEnd();
         sPref=getSharedPreferences("setup",MODE_PRIVATE);
+        Log.i(TAG, "AlarmMe.onCreate()");
+
+        mAlarmList = (ListView)findViewById(R.id.alarm_list);
+
+        mAlarmListAdapter = new AlarmListAdapter(this);
+        mAlarmList.setAdapter(mAlarmListAdapter);
+        mAlarmList.setOnItemClickListener(mListOnItemClickListener);
+        registerForContextMenu(mAlarmList);
+
+        mCurrentAlarm = null;
         miband=sPref.getInt("miband", -1);
         for (int i = 0; i < quotes.size(); i++) {
             full=quotes.get(i);
@@ -218,6 +245,64 @@ public class MainActivity extends AppCompatActivity{
                 }}            count++;
         }
         }
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        Log.i(TAG, "AlarmMe.onDestroy()");
+//    mAlarmListAdapter.save();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        Log.i(TAG, "AlarmMe.onResume()");
+        mAlarmListAdapter.updateAlarms();
+    }
+
+    public void onAddAlarmClick(View view)
+    {
+        Intent intent = new Intent(getBaseContext(), EditAlarm.class);
+
+        mCurrentAlarm = new Alarm(this);
+        mCurrentAlarm.toIntent(intent);
+
+        MainActivity.this.startActivityForResult(intent, NEW_ALARM_ACTIVITY);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_ALARM_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+                mCurrentAlarm.fromIntent(data);
+                mAlarmListAdapter.add(mCurrentAlarm);
+            }
+            mCurrentAlarm = null;
+        } else if (requestCode == EDIT_ALARM_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
+                mCurrentAlarm.fromIntent(data);
+                mAlarmListAdapter.update(mCurrentAlarm);
+            }
+            mCurrentAlarm = null;
+        } else if (requestCode == PREFERENCES_ACTIVITY) {
+            mAlarmListAdapter.onSettingsUpdated();
+        }
+    }
+    private AdapterView.OnItemClickListener mListOnItemClickListener = new AdapterView.OnItemClickListener()
+    {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            Intent intent = new Intent(getBaseContext(), EditAlarm.class);
+
+            mCurrentAlarm = mAlarmListAdapter.getItem(position);
+            mCurrentAlarm.toIntent(intent);
+            MainActivity.this.startActivityForResult(intent, EDIT_ALARM_ACTIVITY);
+        }
+    };
     public void toEnd(){
         recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
     }
