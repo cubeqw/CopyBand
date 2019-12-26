@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity{
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this, CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setPriority(NotificationCompat.PRIORITY_HIGH).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
+                                .setPriority(NotificationCompat.PRIORITY_MIN).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
                 ;
                 if (message.length() <= bc * tc) {
                     try {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:elevation="0dp">
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_margin="15dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:textColor="#FFFFFF"
+    android:text="Напоминание"
+    android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:textColor="#FFFFFF"
+            android:textSize="35dp"
+            android:id="@+id/reminder_title"
+            android:text="Тестирование работы напоминаний"
+            android:maxLines="3"
+            />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        android:background="@drawable/gradient4"
+        android:layout_gravity="center"
+        android:elevation="5dp"
+        android:id="@+id/clock">
+        <ImageView
+            android:layout_margin="5dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/time"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:layout_gravity="center"
+            android:text="18:35"
+            android:layout_marginRight="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient3"
+        android:elevation="15dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="7dp"
+    android:id="@+id/sending">
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="left"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Отправка на Mi Band"
+        android:id="@+id/send_status"
+        android:layout_gravity="center_vertical"/>
+</LinearLayout>
+    </LinearLayout>
+</LinearLayout>

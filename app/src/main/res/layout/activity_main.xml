@@ -105,7 +105,8 @@
 
                 <ListView
                     style="@style/widget"
-                    android:id="@+id/alarm_list" />
+                    android:id="@+id/alarm_list"
+                    android:divider="@null"/>
 
             </LinearLayout>
 

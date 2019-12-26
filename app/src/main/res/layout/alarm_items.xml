@@ -7,7 +7,7 @@
     >
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:textSize="25dp"
+        android:textSize="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/item_title"
@@ -15,6 +15,7 @@
         android:layout_marginRight="5dp"
         android:layout_weight="50"
         android:text="@string/reminder"
+        android:maxLines="3"
         />
     <LinearLayout
         android:layout_width="match_parent"

@@ -21,6 +21,10 @@ package com.cubeqw.copyband;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.os.PowerManager;
@@ -35,6 +39,9 @@ import android.app.PendingIntent;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Intent;
 import android.content.Context;
@@ -42,6 +49,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class AlarmNotification extends Activity
 {
@@ -49,35 +60,47 @@ public class AlarmNotification extends Activity
   private static String CHANNEL_ID = "0";
   private static final String CHANNEL_NAME = "CopyBand";
   private static final String CHANNEL_DESC = "CopyBand Service";
-  private Ringtone mRingtone;
-  private Vibrator mVibrator;
-  private final long[] mVibratePattern = { 0, 500, 500 };
-  private boolean mVibrate;
-  private Uri mAlarmSound;
-  private long mPlayTime;
   private Timer mTimer = null;
   private Alarm mAlarm;
   private DateTime mDateTime;
   private TextView mTextView;
   private PlayTimerTask mTimerTask;
-
+  LinearLayout clock;
+  SharedPreferences sPref;
+  int bc;
+  int tc;
+  String message;
   @Override
   protected void onCreate(Bundle bundle)
   {
     super.onCreate(bundle);
-
+    setContentView(R.layout.notification);
     getWindow().addFlags(
       WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
       WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
       WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     mDateTime = new DateTime(this);
+    mTextView=findViewById(R.id.reminder_title);
     readPreferences();
-
-    mRingtone = RingtoneManager.getRingtone(getApplicationContext(), mAlarmSound);
-    if (mVibrate)
-      mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-
+    clock=findViewById(R.id.clock);
     start(getIntent());
+    sPref=getSharedPreferences("setup",MODE_PRIVATE);
+    int miband = sPref.getInt("miband", -1);
+    final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
+    if (miband==2){
+      bc=10;
+      tc=80;
+    }
+    if (miband==1){
+      bc=5;
+      tc=123;
+    }
+    if (miband==0){
+      bc=16;
+      tc=123;
+    }
+    clock.startAnimation(animShake);
+    createNotification();
   }
 
   @Override
@@ -105,20 +128,45 @@ public class AlarmNotification extends Activity
   {
     mAlarm = new Alarm(this);
     mAlarm.fromIntent(intent);
+    message=mAlarm.getTitle();
+    mTextView.setText(message);
     Log.i(TAG, "AlarmNotification.start('" + mAlarm.getTitle() + "')");
     mTimerTask = new PlayTimerTask();
     mTimer = new Timer();
-    mTimer.schedule(mTimerTask, mPlayTime);
-    mRingtone.play();
   }
-
+  public void createNotification(){
+    Log.d("CopyBand", "Notification created");
+    for (int i = 0; i < bc; i++) {
+      BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+      if (!mBluetoothAdapter.isEnabled()) {
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_on), Toast.LENGTH_SHORT).show();
+      }
+      else {
+        NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setPriority(NotificationCompat.PRIORITY_MIN).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
+        ;
+        if (message.length() <= bc * tc) {
+          try {
+            if (message.length() > tc - tc * i) {
+              String numbers = message.substring(message.length() - tc);
+              message = message.substring(0, message.length() - tc);
+              mBuilder.setContentText(numbers);
+              mNotificationMgr.notify(1, mBuilder.build());
+            } else {
+              mBuilder.setContentText(message);
+              mNotificationMgr.notify(1, mBuilder.build());
+            }
+          } catch (IndexOutOfBoundsException e) {
+            mBuilder.setContentText(message);
+            mNotificationMgr.notify(1, mBuilder.build());
+          }}}}}
   private void stop()
   {
     Log.i(TAG, "AlarmNotification.stop()");
-
     mTimer.cancel();
-    mRingtone.stop();
-
   }
 
   public void onDismissClick(View view)
@@ -129,10 +177,6 @@ public class AlarmNotification extends Activity
   private void readPreferences()
   {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-    mAlarmSound = Uri.parse(prefs.getString("alarm_sound_pref", "DEFAULT_RINGTONE_URI"));
-    mVibrate = prefs.getBoolean("vibrate_pref", true);
-    mPlayTime = (long)Integer.parseInt(prefs.getString("alarm_play_time_pref", "30")) * 1000;
   }
 
   private void addNotification(Alarm alarm)
