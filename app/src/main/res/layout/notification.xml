@@ -15,11 +15,12 @@
     android:layout_height="wrap_content"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_margin="7dp"
             android:textColor="#FFFFFF"
             android:textSize="35dp"
             android:id="@+id/reminder_title"
+            android:gravity="center_vertical"
             android:text="Тестирование работы напоминаний"
             android:maxLines="3"
             />
@@ -43,13 +44,15 @@
             android:textSize="10dp"
             android:layout_gravity="center"
             android:text="18:35"
+            android:id="@+id/clock_string"
             android:layout_marginRight="5dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient3"
-        android:elevation="15dp">
+        android:elevation="15dp"
+        android:orientation="vertical">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -71,5 +74,51 @@
         android:id="@+id/send_status"
         android:layout_gravity="center_vertical"/>
 </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:text="@string/title_bd"
+            android:id="@+id/bt_st" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/dialog">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:text="@string/bt_diag" />
+
+            <Button
+                android:layout_width="250dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:text="@string/off"
+                android:background="@drawable/gradient4"
+                android:layout_margin="7dp"
+                android:onClick="onClick_ok"
+                android:elevation="15dp" />
+
+            <Button
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/cancel"
+                android:background="@drawable/gradient4"
+                android:layout_margin="7dp"
+                android:elevation="15dp"
+                android:onClick="onClick_cancel" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -33,14 +33,17 @@
         </activity>
         <activity
             android:name=".EditAlarm"
+            android:screenOrientation="portrait"
             android:label="Edit alarm" />
 
         <activity
             android:name=".AlarmNotification"
+            android:screenOrientation="portrait"
             android:label="Alarm notification" />
 
         <activity
             android:name=".Preferences"
+            android:screenOrientation="portrait"
             android:label="Preferences" />
 
         <receiver

@@ -19,53 +19,45 @@
 
 package com.cubeqw.copyband;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import android.app.AlertDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Vibrator;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
-import android.net.Uri;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.NotificationChannel;
-import android.app.Notification.Builder;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.WindowManager;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.content.Intent;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class AlarmNotification extends Activity
 {
   private final String TAG = "AlarmMe";
   private static String CHANNEL_ID = "0";
-  private static final String CHANNEL_NAME = "CopyBand";
-  private static final String CHANNEL_DESC = "CopyBand Service";
   private Timer mTimer = null;
   private Alarm mAlarm;
+    boolean end_action = false, bt_diag = false;
   private DateTime mDateTime;
-  private TextView mTextView;
+    private TextView mTextView, status_tv, clock_tv, bt_st;
   private PlayTimerTask mTimerTask;
-  LinearLayout clock;
+    LinearLayout clock, dialog;
   SharedPreferences sPref;
   int bc;
   int tc;
@@ -81,8 +73,13 @@ public class AlarmNotification extends Activity
       WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     mDateTime = new DateTime(this);
     mTextView=findViewById(R.id.reminder_title);
+      status_tv = findViewById(R.id.send_status);
+      dialog = findViewById(R.id.dialog);
+      bt_st = findViewById(R.id.bt_st);
     readPreferences();
     clock=findViewById(R.id.clock);
+      clock_tv = findViewById(R.id.clock_string);
+      clock_tv.setText(new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()));
     start(getIntent());
     sPref=getSharedPreferences("setup",MODE_PRIVATE);
     int miband = sPref.getInt("miband", -1);
@@ -108,18 +105,26 @@ public class AlarmNotification extends Activity
   {
     super.onDestroy();
     Log.i(TAG, "AlarmNotification.onDestroy()");
-
     stop();
   }
 
+    public void onClick_ok(View v) {
+        bt_diag = true;
+        bt_st.setText("Bluetooth будет отключён");
+        dialog.setVisibility(View.GONE);
+    }
+
+    public void onClick_cancel(View v) {
+        bt_st.setText("Bluetooth останется включенным");
+        bt_diag = false;
+        dialog.setVisibility(View.GONE);
+    }
   @Override
   protected void onNewIntent(Intent intent)
   {
     super.onNewIntent(intent);
     Log.i(TAG, "AlarmNotification.onNewIntent()");
-
     addNotification(mAlarm);
-
     stop();
     start(intent);
   }
@@ -134,21 +139,40 @@ public class AlarmNotification extends Activity
     mTimerTask = new PlayTimerTask();
     mTimer = new Timer();
   }
+
+    public void end_action() {
+        NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
+        mNotificationMgr.cancelAll();
+        if (bt_diag) {
+            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (mBluetoothAdapter.isEnabled()) {
+                mBluetoothAdapter.disable();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_off), Toast.LENGTH_SHORT).show();
+            }
+        }
+        this.finish();
+    }
   public void createNotification(){
     Log.d("CopyBand", "Notification created");
     for (int i = 0; i < bc; i++) {
       BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
       if (!mBluetoothAdapter.isEnabled()) {
-        Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_on), Toast.LENGTH_SHORT).show();
+          status_tv.setText("Включение Bluetooth...");
+          mBluetoothAdapter.enable();
+          Finish finish = new Finish(20000, 1000);
+          finish.start();
       }
       else {
+          end_action = true;
+          Finish finish = new Finish(20000, 1000);
+          finish.start();
+          status_tv.setText("Отправка на Mi Band...");
         NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setPriority(NotificationCompat.PRIORITY_MIN).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
-        ;
-        if (message.length() <= bc * tc) {
+          if (message.length() <= bc * tc) {
           try {
             if (message.length() > tc - tc * i) {
               String numbers = message.substring(message.length() - tc);
@@ -163,6 +187,24 @@ public class AlarmNotification extends Activity
             mBuilder.setContentText(message);
             mNotificationMgr.notify(1, mBuilder.build());
           }}}}}
+
+    public class Finish extends CountDownTimer {
+
+        public Finish(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish() {
+            if (end_action) {
+                end_action();
+            } else createNotification();
+        }
+
+        public void onTick(long millisUntilFinished) {
+        }
+
+    }
   private void stop()
   {
     Log.i(TAG, "AlarmNotification.stop()");
@@ -185,29 +227,11 @@ public class AlarmNotification extends Activity
     Notification notification;
     PendingIntent activity;
     Intent intent;
-
     Log.i(TAG, "AlarmNotification.addNotification(" + alarm.getId() + ", '" + alarm.getTitle() + "', '" + mDateTime.formatDetails(alarm) + "')");
-
     intent = new Intent(this.getApplicationContext(), MainActivity.class);
     intent.setAction(Intent.ACTION_MAIN);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
     activity = PendingIntent.getActivity(this, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-   /* NotificationChannel channel = new NotificationChannel("alarmme_01", "AlarmMe Notifications",
-        NotificationManager.IMPORTANCE_DEFAULT);
-
-    notification = new Builder(this)
-        .setContentIntent(activity)
-        .setAutoCancel(true)
-        .setContentTitle("Missed alarm: " + alarm.getTitle())
-        .setContentText(mDateTime.formatDetails(alarm))
-        .setChannelId("alarmme_01")
-        .build();
-
-    notificationManager.createNotificationChannel(channel);
-
-    notificationManager.notify((int)alarm.getId(), notification);*/
   }
 
   @Override

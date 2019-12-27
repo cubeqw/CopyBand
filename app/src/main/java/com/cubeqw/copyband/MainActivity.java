@@ -1,13 +1,5 @@
 package com.cubeqw.copyband;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,9 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +22,17 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -107,7 +103,7 @@ public class MainActivity extends AppCompatActivity{
         sPref=getSharedPreferences("setup",MODE_PRIVATE);
         Log.i(TAG, "AlarmMe.onCreate()");
 
-        mAlarmList = (ListView)findViewById(R.id.alarm_list);
+        mAlarmList = findViewById(R.id.alarm_list);
 
         mAlarmListAdapter = new AlarmListAdapter(this);
         mAlarmList.setAdapter(mAlarmListAdapter);
@@ -204,7 +200,6 @@ public class MainActivity extends AppCompatActivity{
                         new NotificationCompat.Builder(this, CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                                 .setPriority(NotificationCompat.PRIORITY_MIN).setSound(null).setAutoCancel(true).setVibrate(new long[]{0L}).setSmallIcon(R.drawable.send_button);
-                ;
                 if (message.length() <= bc * tc) {
                     try {
                         if (message.length() > tc - tc * count) {
@@ -250,7 +245,6 @@ public class MainActivity extends AppCompatActivity{
     {
         super.onDestroy();
         Log.i(TAG, "AlarmMe.onDestroy()");
-//    mAlarmListAdapter.save();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
