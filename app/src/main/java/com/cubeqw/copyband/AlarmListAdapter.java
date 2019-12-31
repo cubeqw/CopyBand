@@ -21,16 +21,15 @@ package com.cubeqw.copyband;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import android.content.Intent;
-import android.content.Context;
-import android.widget.TextView;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
@@ -52,7 +51,7 @@ class AlarmListAdapter extends BaseAdapter
     Log.i(TAG, "AlarmListAdapter.create()");
     mInflater = LayoutInflater.from(context);
     mDateTime = new DateTime(context);
-    mAlarmManager = (AlarmManager)context.getSystemService(mContext.ALARM_SERVICE);
+      mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       dataSetChanged();
     }
@@ -60,13 +59,13 @@ class AlarmListAdapter extends BaseAdapter
 
   public void save()
   {
-    mDataSource.save();
+      DataSource.save();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.KITKAT)
   public void update(Alarm alarm)
   {
-    mDataSource.update(alarm);
+      DataSource.update(alarm);
     dataSetChanged();
   }
 
@@ -74,23 +73,23 @@ class AlarmListAdapter extends BaseAdapter
   public void updateAlarms()
   {
     Log.i(TAG, "AlarmListAdapter.updateAlarms()");
-    for (int i = 0; i < mDataSource.size(); i++)
-      mDataSource.update(mDataSource.get(i));
+      for (int i = 0; i < DataSource.size(); i++)
+          DataSource.update(DataSource.get(i));
     dataSetChanged();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.KITKAT)
   public void add(Alarm alarm)
   {
-    mDataSource.add(alarm);
+      DataSource.add(alarm);
     dataSetChanged();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.KITKAT)
   public void delete(int index)
   {
-    cancelAlarm(mDataSource.get(index));
-    mDataSource.remove(index);
+      cancelAlarm(DataSource.get(index));
+      DataSource.remove(index);
     dataSetChanged();
   }
 
@@ -103,12 +102,12 @@ class AlarmListAdapter extends BaseAdapter
 
   public int getCount()
   {
-    return mDataSource.size();
+      return DataSource.size();
   }
 
   public Alarm getItem(int position)
   {
-    return mDataSource.get(position);
+      return DataSource.get(position);
   }
 
   public long getItemId(int position)
@@ -119,15 +118,15 @@ class AlarmListAdapter extends BaseAdapter
   public View getView(int position, View convertView, ViewGroup parent)
   {
     ViewHolder holder;
-    Alarm alarm = mDataSource.get(position);
+      Alarm alarm = DataSource.get(position);
 
     if (convertView == null)
     {
       convertView = mInflater.inflate(R.layout.alarm_items, null);
 
       holder = new ViewHolder();
-      holder.title = (TextView)convertView.findViewById(R.id.item_title);
-      holder.details = (TextView)convertView.findViewById(R.id.item_details);
+        holder.title = convertView.findViewById(R.id.item_title);
+        holder.details = convertView.findViewById(R.id.item_details);
 
       convertView.setTag(holder);
     }
@@ -144,8 +143,8 @@ class AlarmListAdapter extends BaseAdapter
   @RequiresApi(api = Build.VERSION_CODES.KITKAT)
   private void dataSetChanged()
   {
-    for (int i = 0; i < mDataSource.size(); i++)
-      setAlarm(mDataSource.get(i));
+      for (int i = 0; i < DataSource.size(); i++)
+          setAlarm(DataSource.get(i));
     notifyDataSetChanged();
   }
 

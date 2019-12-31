@@ -1,16 +1,14 @@
 package com.cubeqw.copyband;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
-public class Setup extends AppCompatActivity {
+public class Setup extends Activity {
 
     SharedPreferences sPref;
     private CheckBox mBoldCheckBox;

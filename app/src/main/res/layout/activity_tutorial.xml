@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Tutorial">
+    tools:context=".Tutorial"
+    android:background="@drawable/gradient6">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
     android:text="@string/notification_settings"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
+            android:textColor="#FFFFFF"
     android:layout_margin="12dp"
     android:textSize="22dp"
     android:gravity="center"/>
@@ -32,19 +34,23 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true">
         <Button
-        android:layout_width="match_parent"
+            android:layout_width="305dp"
+            android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:background="@color/cardview_light_background"
-        android:text="@string/setup_br"
+            android:background="@drawable/gradient4"
+            android:text="@string/setup_br"
             android:onClick="onClick"
-        android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="10dp" />
         <Button
-        android:layout_width="match_parent"
+            android:layout_width="305dp"
+            android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:textColor="@color/cardview_light_background"
+            android:textColor="#C2C2C2"
         android:text="@string/start_btn"
         android:onClick="onClick1"
-        android:background="@color/colorPrimary"/>
+            android:background="@drawable/gradient4"
+            android:layout_margin="10dp" />
 
     </LinearLayout>
 </RelativeLayout>

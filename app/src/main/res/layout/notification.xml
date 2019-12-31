@@ -100,25 +100,58 @@
                 android:textSize="20dp"
                 android:text="@string/bt_diag" />
 
-            <Button
-                android:layout_width="250dp"
-                android:layout_gravity="center"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/off"
-                android:background="@drawable/gradient4"
-                android:layout_margin="7dp"
                 android:onClick="onClick_ok"
-                android:elevation="15dp" />
-
-            <Button
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:elevation="5dp"
                 android:layout_gravity="center"
-                android:text="@string/cancel"
                 android:background="@drawable/gradient4"
+                android:orientation="horizontal"
+                android:layout_margin="7dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/bt_on"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                android:text="@string/off"
+                    android:gravity="center"
+                android:background="@drawable/gradient4"
+                android:onClick="onClick_ok"
+                    android:textColor="#FF7F26" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:elevation="5dp"
                 android:layout_margin="7dp"
-                android:elevation="15dp"
-                android:onClick="onClick_cancel" />
+                android:background="@drawable/gradient4">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/bt_off"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:textColor="#C3C3C3"
+                    android:gravity="center"
+                    android:text="@string/cancel"
+                    android:background="@drawable/gradient4"
+                    android:onClick="onClick_cancel" />
+        </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

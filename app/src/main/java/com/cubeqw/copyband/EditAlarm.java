@@ -19,27 +19,30 @@
 
 package com.cubeqw.copyband;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import android.os.Bundle;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.view.View;
-import android.text.TextWatcher;
-import android.text.Editable;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
-import android.widget.AdapterView;
-import android.widget.CompoundButton;
-import android.content.Intent;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class EditAlarm extends Activity
@@ -70,11 +73,11 @@ public class EditAlarm extends Activity
     super.onCreate(bundle);
     setContentView(R.layout.edit);
 
-    mTitle = (EditText)findViewById(R.id.title);
-    mAlarmEnabled = (CheckBox)findViewById(R.id.alarm_checkbox);
-    mOccurence = (Spinner)findViewById(R.id.occurence_spinner);
-    mDateButton = (Button)findViewById(R.id.date_button);
-    mTimeButton = (Button)findViewById(R.id.time_button);
+    mTitle = findViewById(R.id.title);
+    mAlarmEnabled = findViewById(R.id.alarm_checkbox);
+    mOccurence = findViewById(R.id.occurence_spinner);
+    mDateButton = findViewById(R.id.date_button);
+    mTimeButton = findViewById(R.id.time_button);
 
     mAlarm = new Alarm(this);
     mAlarm.fromIntent(getIntent());
@@ -138,17 +141,16 @@ public class EditAlarm extends Activity
 
   public void onDoneClick(View view)
   {
+    Date date = new Date();
     Intent intent = new Intent();
-
+    if (mTitle.equals("")) {
+    } else if (mCalendar.getTimeInMillis() < date.getTime()) {
+      Toast.makeText(getApplicationContext(), getResources().getString(R.string.time_error), Toast.LENGTH_SHORT).show();
+    } else {
     mAlarm.toIntent(intent);
     setResult(RESULT_OK, intent);
-    finish();
-  }
-
-  public void onCancelClick(View view)
-  {
-    setResult(RESULT_CANCELED, null);  
-    finish();
+      finish();
+    }
   }
 
   private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener()
@@ -237,7 +239,7 @@ public class EditAlarm extends Activity
 
     builder = new AlertDialog.Builder(this);
 
-    builder.setTitle("Week days");
+    builder.setTitle(getResources().getString(R.string.week_d));
 
     builder.setMultiChoiceItems(names, days, new DialogInterface.OnMultiChoiceClickListener()
     {
@@ -255,7 +257,7 @@ public class EditAlarm extends Activity
       }
     });
 
-    builder.setNegativeButton("Cancel", null);
+    builder.setNegativeButton(getResources().getString(R.string.cancel), null);
 
     return builder.create();
   }

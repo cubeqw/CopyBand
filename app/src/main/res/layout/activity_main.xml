@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TabHost
-    android:id="@+id/tabHost"
+<TabHost android:id="@+id/tabHost"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </TabWidget>
-
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="5">
 
             <LinearLayout
                 android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:elevation="0dp"
+                    android:id="@+id/messeage_layout">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -50,40 +45,48 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerview_quotes"
+                            android:layout_margin="7dp"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="10" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="450dp"
+                            android:layout_height="650dp"
                             android:layout_gravity="bottom"
                             android:layout_weight="50"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@drawable/gradient5"
+                            android:elevation="15dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
+                                android:orientation="horizontal"
+                                android:background="@drawable/gradient5">
                                 <EditText
                                     android:id="@+id/text"
                                     android:layout_width="match_parent"
-                                    android:layout_height="75dp"
+                                    android:layout_height="55dp"
                                     android:layout_below="@+id/recyclerview_quotes"
                                     android:layout_gravity="center"
                                     android:layout_weight="10"
                                     android:hint="@string/edit"
-                                    android:inputType="textCapSentences"/>
+                                    android:textColorHint="#D1D1D1"
+                                    android:textColor="#FFFFFF"
+                                    android:inputType="textCapSentences"
+                                    android:layout_marginHorizontal="7dp"
+                                    android:layout_marginVertical="3dp" />
 
                                 <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="75dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="50"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:layout_margin="7dp"
+                                    android:cropToPadding="true"
                                     android:onClick="onClick"
-                                    android:src="@drawable/send_button"
-                                    android:layout_margin="7dp"/>
+                                    android:layout_gravity="center"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/send_button" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -96,21 +99,32 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/reminder_layout">
-
-                <Button
-                    style="@style/widget"
-                    android:id="@+id/add_alarm"
-                    android:text="Add alarm"
-                    android:onClick="onAddAlarmClick" />
-
                 <ListView
                     style="@style/widget"
                     android:id="@+id/alarm_list"
-                    android:divider="@null"/>
+                    android:divider="@null"
+                    android:layout_weight="50" />
+
+                <Button
+                    android:id="@+id/add_alarm"
+                    android:text="+"
+                    android:textColor="#FFFFFF"
+                    android:textSize="50dp"
+                    android:background="@drawable/gradient5"
+                    android:onClick="onAddAlarmClick"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="50dp"
+                    android:layout_height="51dp"
+                    android:layout_width="match_parent" />
 
             </LinearLayout>
-
-
         </FrameLayout>
-    </LinearLayout>
+
+        <TabWidget
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@android:id/tabs"
+            android:background="@drawable/gradient6"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
 </TabHost>

@@ -6,96 +6,109 @@
   android:layout_height="fill_parent"
 >
 
-  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="0dp"
-    android:layout_width="fill_parent"
-    android:layout_weight="1">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:padding="8sp"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       android:orientation="vertical"
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content">
-
-      <TextView
-        style="@style/widget"
-        android:text="Title" />
+        android:layout_height="250dp"
+        android:background="@drawable/gradient6"
+        android:elevation="15dp">
 
       <EditText
         style="@style/widget"
         android:id="@+id/title"
-        android:singleLine="true" />
+          android:maxLines="3"
+          android:hint="@string/edit"
+          android:textColorHint="#FDFDFD"
+          android:textColor="#FFFFFF"
+          android:layout_gravity="center_vertical"
+          android:gravity="end|center"
+          android:layout_margin="7dp"
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:textSize="25dp" />
 
-      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <Button
+            android:id="@+id/done"
+            android:text="✓"
+            android:onClick="onDoneClick"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/gradient4"
+            android:layout_margin="5dp"
+            android:elevation="5dp" />
+    </RelativeLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:paddingTop="8sp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:layout_margin="15dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <CheckBox
-          android:id="@+id/alarm_checkbox"
-          android:layout_weight="1"
-          android:layout_width="0sp"
-          android:layout_height="wrap_content"
-          android:text="Alarm" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/remind_title" />
+        <Button
+            android:id="@+id/date_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onDateClick"
+            android:background="@drawable/gradient4"
+            android:textColor="@color/colorPrimary"
+            android:elevation="5dp"
+            android:textSize="25dp"
+            android:layout_margin="7dp" />
 
-        <Spinner
-          android:id="@+id/occurence_spinner"
-          android:layout_weight="1"
-          android:layout_width="0sp"
-          android:layout_height="wrap_content"
-          android:spinnerMode="dropdown"
-          android:entries="@array/occurence" />
-
-      </LinearLayout>
-
-      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:paddingTop="8sp"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/in" />
 
         <Button
-          android:id="@+id/date_button"
-          android:layout_weight="2"
-          android:layout_width="0sp"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:onClick="onDateClick" />
-
-        <Button
-          android:id="@+id/time_button"
-          android:layout_weight="1"
-          android:layout_width="0sp"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:onClick="onTimeClick" />
-
-      </LinearLayout>
-
+            android:id="@+id/time_button"
+            android:layout_weight="1"
+            android:layout_margin="7dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/gradient4"
+            android:textColor="@color/colorPrimary"
+            android:textSize="25dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="onTimeClick"
+            android:elevation="5dp" />
     </LinearLayout>
-
-  </ScrollView>
-
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:padding="8sp"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+      android:layout_height="wrap_content"></LinearLayout>
 
-    <Button
-      style="@style/edit_button"
-      android:id="@+id/done"
-      android:text="Done"
-      android:onClick="onDoneClick" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:layout_margin="7dp">
 
-    <Button
-      style="@style/edit_button"
-      android:id="@+id/cancel"
-      android:text="Cancel"
-      android:onClick="onCancelClick" />
+        <CheckBox
+            android:id="@+id/alarm_checkbox"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:text="@string/alarm" />
 
-  </LinearLayout>
+        <Spinner
+            android:id="@+id/occurence_spinner"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:entries="@array/occurence" />
 
+    </LinearLayout>
 </LinearLayout>
 

@@ -7,17 +7,25 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,13 +40,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private static String CHANNEL_ID = "0";
     private static final String CHANNEL_NAME = "CopyBand";
     private static final String CHANNEL_DESC = "CopyBand Service";
+    private final int CONTEXT_MENU_EDIT = 0;
+    private final int CONTEXT_MENU_DELETE = 1;
+    private final int CONTEXT_MENU_DUPLICATE = 2;
     String message;
     String full;
     ArrayList <String>quotes=new ArrayList<>();
@@ -47,9 +57,11 @@ public class MainActivity extends AppCompatActivity{
     boolean connected=true;
     EditText text;
     boolean bt_diag=false;
+    int bt_save = 0;
     SharedPreferences sPref;
     int miband;
     TextView empty;
+    SharedPreferences.Editor editor;
     TinyDB tb;
     AlertDialog.Builder bluetooth_dialog;
     AlertDialog.Builder long_dialog;
@@ -60,15 +72,15 @@ public class MainActivity extends AppCompatActivity{
     RecyclerView recyclerView;
     TabHost mTabHost;
     private final String TAG = "AlarmMe";
-
     private ListView mAlarmList;
+    boolean end_action = true;
     private AlarmListAdapter mAlarmListAdapter;
     private Alarm mCurrentAlarm;
-
     private final int NEW_ALARM_ACTIVITY = 0;
     private final int EDIT_ALARM_ACTIVITY = 1;
     private final int PREFERENCES_ACTIVITY = 2;
-
+    LinearLayout r;
+    RelativeLayout m;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +89,35 @@ public class MainActivity extends AppCompatActivity{
         setTheme(R.style.AppTheme);
         mTabHost=findViewById(R.id.tabHost);
         mTabHost.setup();
+        r = findViewById(R.id.reminder_layout);
+        m = findViewById(R.id.messeage_layout);
+        final View r_a = r;
+        final View m_a = m;
+        final Animation animTabs = AnimationUtils.loadAnimation(this, R.anim.tabs);
+        final Animation animM = AnimationUtils.loadAnimation(this, R.anim.m);
+        final Animation animR = AnimationUtils.loadAnimation(this, R.anim.r);
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+
+            @Override
+            public void onTabChanged(String tabId) {
+
+                for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
+                    TextView tv = mTabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
+                    tv.setTextColor(Color.parseColor("#d0d0d0"));
+                }
+
+                TextView tv = mTabHost.getCurrentTabView().findViewById(android.R.id.title);//for Selected Tab
+                if (mTabHost.getCurrentTab() == 0) {
+                    m_a.startAnimation(animR);
+                } else {
+                    r_a.startAnimation(animM);
+                }
+                tv.setTextColor(Color.parseColor("#FFFFFF"));
+                View v = tv;
+                v.startAnimation(animTabs);
+
+            }
+        });
         TabHost.TabSpec tabSpec = mTabHost.newTabSpec("tag1");
         tabSpec.setContent(R.id.main);
         tabSpec.setIndicator(getResources().getString(R.string.messages));
@@ -104,7 +145,7 @@ public class MainActivity extends AppCompatActivity{
         Log.i(TAG, "AlarmMe.onCreate()");
 
         mAlarmList = findViewById(R.id.alarm_list);
-
+        bt_save = sPref.getInt("bt", 0);
         mAlarmListAdapter = new AlarmListAdapter(this);
         mAlarmList.setAdapter(mAlarmListAdapter);
         mAlarmList.setOnItemClickListener(mListOnItemClickListener);
@@ -147,7 +188,12 @@ public class MainActivity extends AppCompatActivity{
         }
         toEnd();
     }
-    public void onClick(View v){
+
+    public void onClick(View v) throws InterruptedException {
+        final Animation animS = AnimationUtils.loadAnimation(this, R.anim.send);
+        final Animation animE = AnimationUtils.loadAnimation(this, R.anim.shake);
+        animE.setRepeatCount(0);
+        v.startAnimation(animS);
         message = text.getText().toString();
         date=new SimpleDateFormat("dd.MM HH:mm").format(Calendar.getInstance().getTime());
         if(!text.getText().toString().equals("")){
@@ -162,28 +208,56 @@ public class MainActivity extends AppCompatActivity{
             toEnd();
             tb.putListString("history", quotes);
             tb.putListString("dates",dates);
-            String title=getResources().getString(R.string.title_bd);
-            String msg=getResources().getString(R.string.bt_diag);
-            String off=getResources().getString(R.string.off);
-            String cancel=getResources().getString(R.string.cancel);
-            bluetooth_dialog = new AlertDialog.Builder(MainActivity.this);
-            bluetooth_dialog.setTitle(title);
-            bluetooth_dialog.setMessage(msg);
-            bluetooth_dialog.setPositiveButton(off, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    bt_diag = true;
-                }
-            });
-            bluetooth_dialog.setNegativeButton(cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    bt_diag = false;
-                }
-            });
-            bluetooth_dialog.show();
+            if (bt_save == 11) {
+                bt_diag = true;
+            } else if (bt_save == 12) {
+                bt_diag = false;
+            } else {
+                String title = getResources().getString(R.string.title_bd);
+                String msg = getResources().getString(R.string.bt_diag);
+                String off = getResources().getString(R.string.off);
+                String cancel = getResources().getString(R.string.cancel);
+                bluetooth_dialog = new AlertDialog.Builder(MainActivity.this);
+                bluetooth_dialog.setTitle(title);
+                View checkBoxView = View.inflate(this, R.layout.check, null);
+                CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        bt_save = 10;
+                        editor = sPref.edit();
+                        editor.putInt("bt", bt_save);
+                    }
+                });
+                bluetooth_dialog.setView(checkBoxView);
+                bluetooth_dialog.setMessage(msg);
+                bluetooth_dialog.setPositiveButton(off, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        bt_diag = true;
+                        if (bt_save >= 10) {
+                            bt_save = 11;
+                            editor.putInt("bt", bt_save);
+                        }
+                    }
+                });
+                bluetooth_dialog.setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        bt_diag = false;
+                        if (bt_save >= 10) {
+                            bt_save = 12;
+                            editor.putInt("bt", bt_save);
+                        }
+                    }
+                });
+                bluetooth_dialog.show();
+            }
             Finish finish = new Finish(30000, 1000);
             finish.start();
         }
-    }}
+        } else {
+            v.startAnimation(animE);
+        }
+    }
     public void createNotification(){
         for (int i = 0; i < bc; i++) {
             empty.setVisibility(View.GONE);
@@ -192,6 +266,9 @@ public class MainActivity extends AppCompatActivity{
             if (!mBluetoothAdapter.isEnabled()) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.bt_on), Toast.LENGTH_SHORT).show();
                 connected=false;
+                mBluetoothAdapter.enable();
+                Finish finish = new Finish(20000, 1000);
+                finish.start();
             }
             else {
                 connected=true;
@@ -307,6 +384,45 @@ public class MainActivity extends AppCompatActivity{
         return true;    }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.alarm_list) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+            menu.setHeaderTitle(mAlarmListAdapter.getItem(info.position).getTitle());
+            menu.add(Menu.NONE, CONTEXT_MENU_EDIT, Menu.NONE, getResources().getString(R.string.menu_edit));
+            menu.add(Menu.NONE, CONTEXT_MENU_DELETE, Menu.NONE, getResources().getString(R.string.delete));
+            menu.add(Menu.NONE, CONTEXT_MENU_DUPLICATE, Menu.NONE, getResources().getString(R.string.duplicate));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int index = item.getItemId();
+
+        if (index == CONTEXT_MENU_EDIT) {
+            Intent intent = new Intent(getBaseContext(), EditAlarm.class);
+
+            mCurrentAlarm = mAlarmListAdapter.getItem(info.position);
+            mCurrentAlarm.toIntent(intent);
+            startActivityForResult(intent, EDIT_ALARM_ACTIVITY);
+        } else if (index == CONTEXT_MENU_DELETE) {
+            mAlarmListAdapter.delete(info.position);
+        } else if (index == CONTEXT_MENU_DUPLICATE) {
+            Alarm alarm = mAlarmListAdapter.getItem(info.position);
+            Alarm newAlarm = new Alarm(this);
+            Intent intent = new Intent();
+
+            alarm.toIntent(intent);
+            newAlarm.fromIntent(intent);
+            newAlarm.setTitle(alarm.getTitle() + " (copy)");
+            mAlarmListAdapter.add(newAlarm);
+        }
+
+        return true;
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -361,7 +477,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
     private class CustomAdapter extends RecyclerView.Adapter<QuoteViewHolder>{
-        private List<String> quotes = new ArrayList<>();
+        private ArrayList<String> quotes = new ArrayList<>();
         public CustomAdapter()
         {
             super();
@@ -383,6 +499,17 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onBindViewHolder(QuoteViewHolder holder, final int position)
         {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    quotes.remove(position);
+                    dates.remove(position);
+                    tb.putListString("history", quotes);
+                    tb.putListString("dates", dates);
+                    notifyDataSetChanged();
+                    return false;
+                }
+            });
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -396,6 +523,8 @@ public class MainActivity extends AppCompatActivity{
                         if(connected) {
                         quotes.remove(position);
                         dates.remove(position);
+                            tb.putListString("history", quotes);
+                            tb.putListString("dates", dates);
                         count = 0;
                         notifyDataSetChanged();
                         text.setText("");

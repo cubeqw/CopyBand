@@ -157,7 +157,7 @@ public class AlarmNotification extends Activity
     for (int i = 0; i < bc; i++) {
       BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
       if (!mBluetoothAdapter.isEnabled()) {
-          status_tv.setText("Включение Bluetooth...");
+        status_tv.setText(getResources().getString(R.string.bt_on));
           mBluetoothAdapter.enable();
           Finish finish = new Finish(20000, 1000);
           finish.start();
@@ -166,7 +166,7 @@ public class AlarmNotification extends Activity
           end_action = true;
           Finish finish = new Finish(20000, 1000);
           finish.start();
-          status_tv.setText("Отправка на Mi Band...");
+        status_tv.setText(getResources().getString(R.string.wait_send));
         NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)

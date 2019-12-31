@@ -10,15 +10,15 @@
     <string name="about">About</string>
     <string name="annotation">Do you want to remember something, but the phone is about to be discharged, or do you want to carry it with you? I have great news for you! You have a Mi Band, and you can send text to it using this application. Just enter it in the input field and click send. Magic happens and you see this text on your bracelet.</string>
     <string name="title_bd">Turn off bluetooth?</string>
-    <string name="bt_diag">To prevent text loss due to other notifications, turn off Bluetooth. It will be disconnected after 30 seconds.</string>
+    <string name="bt_diag">To prevent text loss due to other notifications, turn off Bluetooth.</string>
     <string name="off">Turn off</string>
     <string name="cancel">Cancel</string>
     <string name="dialog_app">It seems that you do not have the Mi Fit application installed. Want to install it?</string>
     <string name="install">Install</string>
     <string name="bt_off">Bluetooth off</string>
-    <string name="bt_on">Bluetooth is off. Turn on Bluetooth and check the connection with the bracelet.</string>
+    <string name="bt_on">Turning on Bluetooth...</string>
     <string name="setup_br">Chose Mi Band</string>
-    <string name="edit">Your message...</string>
+    <string name="edit">Message...</string>
     <string name="empty">History is empty, but it\'s easy to fix! Just send a message to your bracelet.</string>
     <string name="git">GitHub</string>
     <string name="long_title">Very long message</string>
@@ -26,6 +26,7 @@
     <string name="contine">Contine</string>
     <string name="messages">Messages</string>
     <string name="reminder">Reminder</string>
+    <string name="alarm">Alarm</string>
     <string-array name="occurence">
         <item>Once</item>
         <item>Weekly</item>
@@ -48,4 +49,13 @@
         <item>180</item>
         <item>300</item>
     </string-array>
+    <string name="remind_title">I will remind you</string>
+    <string name="in">in</string>
+    <string name="dsa">Don\'t show again</string>
+    <string name="week_d">Week days</string>
+    <string name="menu_edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="duplicate">Duplicate</string>
+    <string name="wait_send">Sending on Mi Band...</string>
+    <string name="time_error">Cannot set a reminder to the past</string>
 </resources>

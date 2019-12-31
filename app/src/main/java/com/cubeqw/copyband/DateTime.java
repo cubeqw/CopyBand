@@ -19,13 +19,14 @@
 
 package com.cubeqw.copyband;
 
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DateTime
 {
@@ -96,9 +97,9 @@ public class DateTime
     boolean[] days = getDays(alarm);
     String res = "";
 
-    if (alarm.getDays() == alarm.NEVER)
+      if (alarm.getDays() == Alarm.NEVER)
       res = "Never";
-    else if (alarm.getDays() == alarm.EVERY_DAY)
+      else if (alarm.getDays() == Alarm.EVERY_DAY)
       res = "Every day";
     else
     {

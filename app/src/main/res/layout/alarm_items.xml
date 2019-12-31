@@ -7,7 +7,8 @@
     >
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:textSize="15dp"
+        android:textSize="23dp"
+        android:textColor="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/item_title"
