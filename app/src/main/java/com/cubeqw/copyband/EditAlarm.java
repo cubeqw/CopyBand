@@ -72,7 +72,7 @@ public class EditAlarm extends Activity
   {
     super.onCreate(bundle);
     setContentView(R.layout.edit);
-
+    overridePendingTransition(R.anim.up, R.anim.up);
     mTitle = findViewById(R.id.title);
     mAlarmEnabled = findViewById(R.id.alarm_checkbox);
     mOccurence = findViewById(R.id.occurence_spinner);
